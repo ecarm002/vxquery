@@ -1316,7 +1316,7 @@ public class XMLQueryTranslator {
                 break;
             case NULL:
                 t = SequenceType.create(BuiltinTypeRegistry.JS_NULL, Quantifier.QUANT_ONE);
-                value=null;
+                value = null;
                 break;
             default:
                 throw new IllegalStateException("Unknown type: " + lType);
@@ -1981,7 +1981,7 @@ public class XMLQueryTranslator {
                         stringVB.write((CharSequence) value, dOut);
                         break;
                     }
-                    case BuiltinTypeConstants.JS_NULL_TYPE_ID:{
+                    case BuiltinTypeConstants.JS_NULL_TYPE_ID: {
                         baaos.reset();
                         dOut.write((byte) ValueTag.JS_NULL_TAG);
                         break;

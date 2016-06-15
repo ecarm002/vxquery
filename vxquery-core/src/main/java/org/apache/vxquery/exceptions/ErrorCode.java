@@ -168,12 +168,12 @@ public enum ErrorCode {
     JNDY0021(new QName(XQueryConstants.ERR_NSURI, "JNDY0021"), ErrorMessages.ERR_JNDY0021_DESCRIPTION),
     JNSE0022(new QName(XQueryConstants.ERR_NSURI, "JNSE0022"), ErrorMessages.ERR_JNSE0022_DESCRIPTION),
     JNTY0023(new QName(XQueryConstants.ERR_NSURI, "JNTY0023"), ErrorMessages.ERR_JNTY0023_DESCRIPTION),
-    JNTY0024(new QName(XQueryConstants.ERR_NSURI, "JNDY0003"), ErrorMessages.ERR_JNTY0024_DESCRIPTION),
+    JNTY0024(new QName(XQueryConstants.ERR_NSURI, "JNDY0024"), ErrorMessages.ERR_JNTY0024_DESCRIPTION),
 
     SYSE0001(new QName(XQueryConstants.ERR_NSURI, "SYSE0001"), ErrorMessages.ERR_SYSE0001_DESCRIPTION),
     TODO(new QName(XQueryConstants.ERR_NSURI, "TODO"), ErrorMessages.ERR_TODO_DESCRIPTION),
     ;
-    
+
     private QName qname;
     private String description;
 

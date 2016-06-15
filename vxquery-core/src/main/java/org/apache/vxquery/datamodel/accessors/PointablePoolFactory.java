@@ -75,11 +75,11 @@ public class PointablePoolFactory {
         pp.register(NodeTreePointable.class, NodeTreePointable.FACTORY);
         pp.register(DocumentNodePointable.class, DocumentNodePointable.FACTORY);
         pp.register(ElementNodePointable.class, ElementNodePointable.FACTORY);
-        pp.register(ArrayPointable.class, ArrayPointable.FACTORY);
         pp.register(AttributeNodePointable.class, AttributeNodePointable.FACTORY);
         pp.register(TextOrCommentNodePointable.class, TextOrCommentNodePointable.FACTORY);
         pp.register(PINodePointable.class, PINodePointable.FACTORY);
 
+        pp.register(ArrayPointable.class, ArrayPointable.FACTORY);
         pp.register(ObjectPointable.class, ObjectPointable.FACTORY);
 
         return pp;

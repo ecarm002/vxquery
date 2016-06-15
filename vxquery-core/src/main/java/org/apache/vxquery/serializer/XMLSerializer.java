@@ -375,63 +375,42 @@ public class XMLSerializer implements IPrinter {
             e.printStackTrace();
         } finally {
             pp.giveBack(keys);
-        }
-    }
-
-    private void printObjectPair(PrintStream ps, TaggedValuePointable keys, ObjectPointable op) {
-        UTF8StringPointable utf8sp = pp.takeOne(UTF8StringPointable.class);
-        TaggedValuePointable tvp = pp.takeOne(TaggedValuePointable.class);
-        try {
-            printQuotedString(ps, keys);
-            keys.getValue(utf8sp);
-            ps.append(":");
-            op.getValue(utf8sp, tvp);
-            if (tvp.getTag() == ValueTag.XS_STRING_TAG) {
-                printQuotedString(ps, tvp);
-            } else {
-                printTaggedValuePointable(ps, tvp);
-            }
-        } finally {
             pp.giveBack(op);
-            pp.giveBack(tvp);
-            pp.giveBack(utf8sp);
         }
     }
 
     private void printObjectPairs(PrintStream ps, TaggedValuePointable keys, ObjectPointable op) {
         SequencePointable seqp = pp.takeOne(SequencePointable.class);
-        UTF8StringPointable utf8sp = pp.takeOne(UTF8StringPointable.class);
         TaggedValuePointable tvp = pp.takeOne(TaggedValuePointable.class);
         try {
             keys.getValue(seqp);
             int len = seqp.getEntryCount();
             for (int i = 0; i < len; i++) {
                 seqp.getEntry(i, tvp);
-                printQuotedString(ps, tvp);
-                tvp.getValue(utf8sp);
-                ps.append(":");
-                op.getValue(utf8sp, tvp);
-                if (tvp.getTag() == ValueTag.XS_STRING_TAG) {
-                    printQuotedString(ps, tvp);
-                } else {
-                    printTaggedValuePointable(ps, tvp);
-                }
+                printObjectPair(ps, tvp, op);
                 if (i != len - 1) {
                     ps.append(',');
                 }
             }
         } finally {
-            pp.giveBack(op);
             pp.giveBack(seqp);
             pp.giveBack(tvp);
-            pp.giveBack(utf8sp);
         }
     }
 
-    private void printQuotedString(PrintStream ps, TaggedValuePointable tvp) {
-        ps.append('\"');
-        printString(ps, tvp);
-        ps.append('\"');
+    private void printObjectPair(PrintStream ps, TaggedValuePointable key, ObjectPointable op) {
+        UTF8StringPointable utf8sp = pp.takeOne(UTF8StringPointable.class);
+        TaggedValuePointable tvp = pp.takeOne(TaggedValuePointable.class);
+        try {
+            printQuotedString(ps, key);
+            key.getValue(utf8sp);
+            ps.append(":");
+            op.getValue(utf8sp, tvp);
+            printJsonValue(ps, tvp);
+        } finally {
+            pp.giveBack(tvp);
+            pp.giveBack(utf8sp);
+        }
     }
 
     private void printArray(PrintStream ps, TaggedValuePointable tvp) {
@@ -440,20 +419,31 @@ public class XMLSerializer implements IPrinter {
             tvp.getValue(ap);
             int len = ap.getEntryCount();
             ps.append('[');
-            ps.append(' ');
             for (int i = 0; i < len; i++) {
                 ap.getEntry(i, tvp);
-                print(tvp.getByteArray(), tvp.getStartOffset(), tvp.getLength(), ps);
+                printJsonValue(ps, tvp);
                 if (i != len - 1) {
                     ps.append(',');
                 }
-                ps.append(' ');
             }
             ps.append(']');
         } finally {
             pp.giveBack(ap);
-            pp.giveBack(tvp);
         }
+    }
+
+    private void printJsonValue(PrintStream ps, TaggedValuePointable tvp) {
+        if (tvp.getTag() == ValueTag.XS_STRING_TAG) {
+            printQuotedString(ps, tvp);
+        } else {
+            printTaggedValuePointable(ps, tvp);
+        }
+    }
+
+    private void printQuotedString(PrintStream ps, TaggedValuePointable tvp) {
+        ps.append('\"');
+        printString(ps, tvp);
+        ps.append('\"');
     }
 
     private void printElementNode(PrintStream ps, TaggedValuePointable tvp) {
